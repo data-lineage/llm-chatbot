@@ -1,5 +1,6 @@
 from typing import Any, List, Tuple
 
+import os
 from langchain.agents import AgentExecutor
 from langchain.agents.format_scratchpad import format_to_openai_function_messages
 from langchain.agents.output_parsers import OpenAIFunctionsAgentOutputParser
@@ -7,13 +8,24 @@ from langchain.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain.pydantic_v1 import BaseModel, Field
 from langchain.schema import AIMessage, HumanMessage
 from langchain.tools.render import format_tool_to_openai_function
-from langchain_community.chat_models import ChatOpenAI
+# from langchain_community.chat_models import AzureChatOpenAI
+from langchain_openai import AzureChatOpenAI
 
 from neo4j_semantic_layer.information_tool import InformationTool
 from neo4j_semantic_layer.memory_tool import MemoryTool
 from neo4j_semantic_layer.recommendation_tool import RecommenderTool
 
-llm = ChatOpenAI(temperature=0, model="gpt-4", streaming=True)
+AZURE_OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+AZURE_OPENAI_ENDPOINT = os.getenv('AZURE_OPENAI_ENDPOINT')
+
+llm = AzureChatOpenAI(temperature=0,
+model="gpt-35-turbo",
+streaming=True,
+deployment_name="anansi-35-turbo",
+openai_api_key=AZURE_OPENAI_API_KEY,
+azure_endpoint="https://api-key.openai.azure.com/",
+openai_api_version="2024-02-01"
+)
 tools = [InformationTool(), RecommenderTool(), MemoryTool()]
 
 llm_with_tools = llm.bind(functions=[format_tool_to_openai_function(t) for t in tools])

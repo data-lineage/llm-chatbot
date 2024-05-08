@@ -10,6 +10,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.8.1,<4.0"
 langchain = ">=0.0.353,<0.2"
+langchain_openai = "^0.1.6"
 openai = "<2"
 neo4j = "^5.14.0"
 
