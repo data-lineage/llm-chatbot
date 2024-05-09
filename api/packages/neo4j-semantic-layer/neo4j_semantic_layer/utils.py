@@ -2,8 +2,14 @@ from typing import Dict, List
 
 from langchain_community.graphs import Neo4jGraph
 
-graph = Neo4jGraph()
+import os
+# Load from environment
+NEO4J_URI = os.getenv('NEO4J_URI')
+NEO4J_USERNAME = os.getenv('NEO4J_USERNAME')
+NEO4J_PASSWORD = os.getenv('NEO4J_PASSWORD')
+NEO4J_DATABASE = os.getenv('NEO4J_DATABASE')
 
+graph = Neo4jGraph(url=NEO4J_URI, username=NEO4J_USERNAME,password=NEO4J_PASSWORD,database=NEO4J_DATABASE)
 
 def get_user_id() -> int:
     """
