@@ -29,7 +29,7 @@ jobs:
     - name: Build and push container image to registry
       uses: docker/build-push-action@v3
       with:
-        context: .
+        context: api/.
         push: true
         tags: ghcr.io/${{ secrets.AzureAppService_ContainerUsername_ae31b467dab04c6a92ed386c9fee57ae }}/llm-chatbot:${{ github.sha }}
         file: Dockerfile
