@@ -40,6 +40,9 @@ def remove_lucene_chars(text: str) -> str:
         "?",
         ":",
         "\\",
+        ".",
+        ",",
+        "/",
     ]
     for char in special_chars:
         if char in text:
@@ -68,8 +71,8 @@ def generate_full_text_query(input: str) -> str:
 candidate_query = """
 CALL db.index.fulltext.queryNodes($index, $fulltextQuery, {limit: $limit})
 YIELD node
-RETURN coalesce(node.managerName) AS candidate,
-       [el in labels(node) WHERE el IN ['Manager'] | el][0] AS label
+RETURN coalesce(node.managerName,node.companyName) AS candidate,
+       [el in labels(node) WHERE el IN ['Manager','Company'] | el][0] AS label
 """
 
 
@@ -80,8 +83,8 @@ def get_candidates(input: str, type: str, limit: int = 3) -> List[Dict[str, str]
     This function queries the Neo4j database using a full-text search. It takes the
     input string, generates a full-text query, and executes this query against the
     specified index in the database. The function returns a list of candidates
-    matching the query, with each candidate being a dictionary containing their name
-    (or title) and label (either 'Person' or 'Movie').
+    matching the query, with each candidate being a dictionary containing their managerName
+    (or companyName) and label (either 'Manager' or 'Company').
     """
     ft_query = generate_full_text_query(input)
     candidates = graph.query(

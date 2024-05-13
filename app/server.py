@@ -12,7 +12,7 @@ async def redirect_root_to_docs():
 
 
 # Edit this to add the chain you want to add
-add_routes(app, neo4j_semantic_agent, path="/movie-agent")
+add_routes(app, neo4j_semantic_agent, path="/form10k")
 # add_routes(app, neo4j_semantic_agent, path="/neo4j-semantic-layer")
 
 if __name__ == "__main__":
